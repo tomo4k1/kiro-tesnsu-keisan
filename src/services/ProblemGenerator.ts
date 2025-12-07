@@ -14,6 +14,12 @@ const FU_VALUES = [20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110];
 const MAX_GENERATION_RETRIES = 3;
 
 /**
+ * ドラ表示牌の最大枚数
+ * 実際の麻雀では、ドラ表示牌は最大5枚（本場表示を除く）
+ */
+const MAX_DORA_TILES = 5;
+
+/**
  * 問題を生成するクラス
  * ランダムな手牌を生成し、難易度に応じた問題を作成する
  * 
@@ -402,7 +408,7 @@ export class ProblemGenerator {
     const allTiles = [...hand.closedTiles, hand.winningTile];
     const dora: Tile[] = [];
     
-    for (let i = 0; i < Math.min(diff, allTiles.length); i++) {
+    for (let i = 0; i < Math.min(diff, allTiles.length, MAX_DORA_TILES); i++) {
       const randomTile = allTiles[Math.floor(Math.random() * allTiles.length)];
       dora.push(randomTile);
     }
