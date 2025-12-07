@@ -12,8 +12,7 @@ import {
   InvalidHandError, 
   CalculationError,
   StorageError,
-  GenerationError,
-  type ErrorInfo 
+  GenerationError
 } from '../types/errors';
 
 /**

@@ -377,7 +377,7 @@ export class ScoreCalculator {
   /**
    * 一盃口かどうか
    */
-  private isIipeikou(hand: Hand): boolean {
+  private isIipeikou(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -385,7 +385,7 @@ export class ScoreCalculator {
   /**
    * 三色同順かどうか
    */
-  private isShikisanshoku(hand: Hand): boolean {
+  private isShikisanshoku(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -393,7 +393,7 @@ export class ScoreCalculator {
   /**
    * 一気通貫かどうか
    */
-  private isIkkitsukan(hand: Hand): boolean {
+  private isIkkitsukan(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -401,9 +401,8 @@ export class ScoreCalculator {
   /**
    * 対々和かどうか
    */
-  private isToitoi(hand: Hand): boolean {
+  private isToitoi(_hand: Hand): boolean {
     // すべての面子が刻子であること
-    const allMelds = [...hand.melds];
     // closedTilesからも刻子を抽出する必要がある
     // 簡易実装
     return false; // TODO: 実装
@@ -433,7 +432,7 @@ export class ScoreCalculator {
   /**
    * 混全帯么九かどうか
    */
-  private isChanta(hand: Hand): boolean {
+  private isChanta(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -457,7 +456,7 @@ export class ScoreCalculator {
   /**
    * 小三元かどうか
    */
-  private isShousangen(hand: Hand): boolean {
+  private isShousangen(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -580,7 +579,7 @@ export class ScoreCalculator {
   /**
    * 役満の飜数を計算
    */
-  private calculateYakumanHan(hand: Hand, winCondition: WinCondition): number {
+  private calculateYakumanHan(hand: Hand, _winCondition: WinCondition): number {
     // 国士無双
     if (this.isKokushi(hand)) {
       return 13;
@@ -629,7 +628,7 @@ export class ScoreCalculator {
   /**
    * 国士無双かどうか
    */
-  private isKokushi(hand: Hand): boolean {
+  private isKokushi(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -659,7 +658,7 @@ export class ScoreCalculator {
   /**
    * 緑一色かどうか
    */
-  private isRyuuiisou(hand: Hand): boolean {
+  private isRyuuiisou(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -682,7 +681,7 @@ export class ScoreCalculator {
   /**
    * 九蓮宝燈かどうか
    */
-  private isChuuren(hand: Hand): boolean {
+  private isChuuren(_hand: Hand): boolean {
     // 簡易実装
     return false; // TODO: 実装
   }
@@ -724,7 +723,7 @@ export class ScoreCalculator {
   /**
    * 雀頭の符を計算
    */
-  private calculatePairFu(hand: Hand, winCondition: WinCondition): number {
+  private calculatePairFu(_hand: Hand, _winCondition: WinCondition): number {
     // 簡易実装: 雀頭の判定は複雑なため省略
     return 0; // TODO: 実装
   }
@@ -732,7 +731,7 @@ export class ScoreCalculator {
   /**
    * 待ちの符を計算
    */
-  private calculateWaitFu(hand: Hand): number {
+  private calculateWaitFu(_hand: Hand): number {
     // 簡易実装: 待ちの判定は複雑なため省略
     // 単騎待ち、嵌張待ち、辺張待ちは2符
     return 0; // TODO: 実装

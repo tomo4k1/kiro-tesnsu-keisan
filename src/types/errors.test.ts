@@ -1,14 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { 
   ErrorHandler, 
-  ErrorType, 
-  AppError,
+  ErrorType,
   InvalidHandError,
   CalculationError,
   StorageError,
   GenerationError,
-  InvalidSelectionError,
-  type ErrorInfo,
+  InvalidSelectionError
 } from './errors';
 
 describe('ErrorHandler', () => {

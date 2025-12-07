@@ -6,56 +6,56 @@ describe('ScoreCalculator - ルール設定の統合', () => {
   const createTestHand = (hasRedTile: boolean, hasMelds: boolean): Hand => {
     // 鳴いている場合は、ポンした3枚を除いた10枚の閉じた牌
     const closedTiles = hasMelds ? [
-      { type: 'man', value: 2 },
-      { type: 'man', value: 3 },
-      { type: 'man', value: 4 },
-      { type: 'sou', value: 6 },
-      { type: 'sou', value: 7 },
-      { type: 'sou', value: 8 },
-      { type: 'man', value: 2 },
-      { type: 'man', value: 2 },
-      { type: 'pin', value: 3 },
-      { type: 'pin', value: 3 }
+      { type: 'man' as const, value: 2 as const },
+      { type: 'man' as const, value: 3 as const },
+      { type: 'man' as const, value: 4 as const },
+      { type: 'sou' as const, value: 6 as const },
+      { type: 'sou' as const, value: 7 as const },
+      { type: 'sou' as const, value: 8 as const },
+      { type: 'man' as const, value: 2 as const },
+      { type: 'man' as const, value: 2 as const },
+      { type: 'pin' as const, value: 3 as const },
+      { type: 'pin' as const, value: 3 as const }
     ] : [
-      { type: 'man', value: 2 },
-      { type: 'man', value: 3 },
-      { type: 'man', value: 4 },
-      { type: 'pin', value: 5, isRed: hasRedTile },
-      { type: 'pin', value: 5 },
-      { type: 'pin', value: 5 },
-      { type: 'sou', value: 6 },
-      { type: 'sou', value: 7 },
-      { type: 'sou', value: 8 },
-      { type: 'man', value: 2 },
-      { type: 'man', value: 2 },
-      { type: 'pin', value: 3 },
-      { type: 'pin', value: 3 }
+      { type: 'man' as const, value: 2 as const },
+      { type: 'man' as const, value: 3 as const },
+      { type: 'man' as const, value: 4 as const },
+      { type: 'pin' as const, value: 5 as const, isRed: hasRedTile },
+      { type: 'pin' as const, value: 5 as const },
+      { type: 'pin' as const, value: 5 as const },
+      { type: 'sou' as const, value: 6 as const },
+      { type: 'sou' as const, value: 7 as const },
+      { type: 'sou' as const, value: 8 as const },
+      { type: 'man' as const, value: 2 as const },
+      { type: 'man' as const, value: 2 as const },
+      { type: 'pin' as const, value: 3 as const },
+      { type: 'pin' as const, value: 3 as const }
     ];
 
     return {
       closedTiles,
       melds: hasMelds ? [{
-        type: 'pon',
+        type: 'pon' as const,
         tiles: [
-          { type: 'pin', value: 5 },
-          { type: 'pin', value: 5 },
-          { type: 'pin', value: 5 }
+          { type: 'pin' as const, value: 5 as const },
+          { type: 'pin' as const, value: 5 as const },
+          { type: 'pin' as const, value: 5 as const }
         ]
       }] : [],
-      winningTile: { type: 'man', value: 2 },
+      winningTile: { type: 'man' as const, value: 2 as const },
       isDealer: false,
-      winType: 'tsumo',
-      prevalentWind: 'east',
-      seatWind: 'south',
+      winType: 'tsumo' as const,
+      prevalentWind: 'east' as const,
+      seatWind: 'south' as const,
       dora: []
     };
   };
 
   const testWinCondition: WinCondition = {
     isDealer: false,
-    winType: 'tsumo',
-    prevalentWind: 'east',
-    seatWind: 'south'
+    winType: 'tsumo' as const,
+    prevalentWind: 'east' as const,
+    seatWind: 'south' as const
   };
 
   describe('赤ドラ設定の反映', () => {

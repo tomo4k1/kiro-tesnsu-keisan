@@ -127,6 +127,9 @@ export interface Statistics {
   correctRate: number; // パーセンテージ
 }
 
+// 拡張統計情報の型のインポート
+import type { ExtendedStatistics } from '../utils/statisticsCalculator';
+
 // セッション状態の型定義
 export interface SessionState {
   currentProblem: Problem | null;

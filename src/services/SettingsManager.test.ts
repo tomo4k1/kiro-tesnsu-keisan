@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { SettingsManager } from './SettingsManager';
 import type { GameSettings } from '../types';
 
@@ -25,7 +25,7 @@ describe('SettingsManager', () => {
     // 各テスト前にストレージをクリア
     localStorageMock.clear();
     // グローバルのlocalStorageをモックで置き換え
-    Object.defineProperty(global, 'localStorage', {
+    Object.defineProperty(globalThis, 'localStorage', {
       value: localStorageMock,
       writable: true,
     });

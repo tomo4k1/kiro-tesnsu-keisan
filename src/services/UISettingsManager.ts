@@ -46,16 +46,6 @@ export class UISettingsManager {
   };
 
   /**
-   * デフォルトUI設定
-   */
-  private static readonly DEFAULT_UI_SETTINGS: UISettings = {
-    animation: UISettingsManager.DEFAULT_ANIMATION_SETTINGS,
-    sound: UISettingsManager.DEFAULT_SOUND_SETTINGS,
-    display: UISettingsManager.DEFAULT_DISPLAY_SETTINGS,
-    tutorial: UISettingsManager.DEFAULT_TUTORIAL_SETTINGS,
-  };
-
-  /**
    * デフォルト設定を取得
    */
   static getDefaultSettings(): UISettings {

@@ -10,7 +10,7 @@ export class QuizManager {
   private generator: ProblemGenerator;
   private statistics: Statistics;
   private answerHistory: AnswerHistory[] = [];
-  private sessionStartTime: number;
+  // private sessionStartTime: number; // 将来の機能拡張用に保持
   private lastProblemId: string | null = null;
 
   constructor(settings: GameSettings) {
@@ -21,7 +21,7 @@ export class QuizManager {
       incorrectCount: 0,
       correctRate: 0,
     };
-    this.sessionStartTime = Date.now();
+    // this.sessionStartTime = Date.now(); // 将来の機能拡張用に保持
   }
 
   /**
@@ -103,7 +103,7 @@ export class QuizManager {
       correctRate: 0,
     };
     this.answerHistory = [];
-    this.sessionStartTime = Date.now();
+    // this.sessionStartTime = Date.now(); // 将来の機能拡張用に保持
     this.lastProblemId = null;
   }
 

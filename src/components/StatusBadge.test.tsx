@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { StatusBadge, type HandStatus } from './StatusBadge';
+import { StatusBadge } from './StatusBadge';
 
 describe('StatusBadge', () => {
   it('空の状態配列の場合は何も表示しない', () => {

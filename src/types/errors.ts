@@ -1,15 +1,17 @@
 /**
  * エラー種別の定義
  */
-export enum ErrorType {
-  INVALID_HAND = 'INVALID_HAND',
-  CALCULATION_ERROR = 'CALCULATION_ERROR',
-  STORAGE_ERROR = 'STORAGE_ERROR',
-  GENERATION_ERROR = 'GENERATION_ERROR',
-  INVALID_SELECTION = 'INVALID_SELECTION',
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-}
+export const ErrorType = {
+  INVALID_HAND: 'INVALID_HAND',
+  CALCULATION_ERROR: 'CALCULATION_ERROR',
+  STORAGE_ERROR: 'STORAGE_ERROR',
+  GENERATION_ERROR: 'GENERATION_ERROR',
+  INVALID_SELECTION: 'INVALID_SELECTION',
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+} as const;
+
+export type ErrorType = typeof ErrorType[keyof typeof ErrorType];
 
 /**
  * エラーの重要度
@@ -32,16 +34,23 @@ export interface ErrorInfo {
  * アプリケーションエラーの基底クラス
  */
 export class AppError extends Error {
+  readonly type: ErrorType;
+  readonly originalError?: unknown;
+
   constructor(
-    public readonly type: ErrorType,
+    type: ErrorType,
     message: string,
-    public readonly originalError?: unknown
+    originalError?: unknown
   ) {
     super(message);
     this.name = 'AppError';
+    this.type = type;
+    this.originalError = originalError;
     
-    // スタックトレースを保持
-    if (Error.captureStackTrace) {
+    // スタックトレースを保持（Node.js環境で利用可能な場合）
+    // @ts-ignore - captureStackTraceはNode.js固有のAPI
+    if (typeof Error.captureStackTrace === 'function') {
+      // @ts-ignore
       Error.captureStackTrace(this, AppError);
     }
   }
