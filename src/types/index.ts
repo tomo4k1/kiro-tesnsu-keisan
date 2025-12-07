@@ -66,6 +66,59 @@ export interface GameSettings {
   atozuke: boolean;      // 後付け有無
 }
 
+// アニメーション設定の型定義
+export interface AnimationSettings {
+  enabled: boolean;
+  speed: 'slow' | 'normal' | 'fast' | 'none';
+  reducedMotion: boolean;
+}
+
+// 音声設定の型定義
+export interface SoundSettings {
+  enabled: boolean;
+  volume: number;
+  correctSound: boolean;
+  incorrectSound: boolean;
+}
+
+// 表示設定の型定義
+export interface DisplaySettings {
+  fontSize: 'small' | 'medium' | 'large';
+  highContrast: boolean;
+  showTooltips: boolean;
+}
+
+// チュートリアル設定の型定義
+export interface TutorialSettings {
+  completed: boolean;
+  skipped: boolean;
+  lastShownVersion: string;
+}
+
+// チュートリアルステップの型定義
+export interface TutorialStep {
+  id: string;
+  title: string;
+  description: string;
+  targetElement?: string;  // CSSセレクタ
+  position: 'top' | 'bottom' | 'left' | 'right' | 'center';
+  action?: () => void;
+}
+
+// UI設定の型定義
+export interface UISettings {
+  animation: AnimationSettings;
+  sound: SoundSettings;
+  display: DisplaySettings;
+  tutorial: TutorialSettings;
+}
+
+// アプリケーション全体の設定
+export interface AppSettings {
+  game: GameSettings;
+  ui: UISettings;
+}
+
 // 統計情報の型定義
 export interface Statistics {
   totalAnswered: number;
@@ -80,6 +133,7 @@ export interface SessionState {
   userAnswer: Partial<Answer>;
   isAnswered: boolean;
   statistics: Statistics;
+  extendedStatistics: ExtendedStatistics;
   settings: GameSettings;
 }
 
@@ -88,3 +142,10 @@ export type WinType = 'tsumo' | 'ron';
 
 // エラー型のエクスポート
 export * from './errors';
+
+// 拡張統計情報の型のエクスポート
+export type { 
+  AnswerHistory, 
+  DifficultyStats, 
+  ExtendedStatistics 
+} from '../utils/statisticsCalculator';

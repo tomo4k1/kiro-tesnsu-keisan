@@ -1,5 +1,6 @@
-import type { Problem, Answer, Statistics, GameSettings, Difficulty } from '../types';
+import type { Problem, Answer, Statistics, GameSettings, Difficulty, AnswerHistory, ExtendedStatistics } from '../types';
 import { ProblemGenerator } from './ProblemGenerator';
+import { calculateExtendedStatistics } from '../utils/statisticsCalculator';
 
 /**
  * クイズの進行を管理するクラス
@@ -8,6 +9,8 @@ import { ProblemGenerator } from './ProblemGenerator';
 export class QuizManager {
   private generator: ProblemGenerator;
   private statistics: Statistics;
+  private answerHistory: AnswerHistory[] = [];
+  private sessionStartTime: number;
   private lastProblemId: string | null = null;
 
   constructor(settings: GameSettings) {
@@ -18,6 +21,7 @@ export class QuizManager {
       incorrectCount: 0,
       correctRate: 0,
     };
+    this.sessionStartTime = Date.now();
   }
 
   /**
@@ -51,24 +55,18 @@ export class QuizManager {
   checkAnswer(problem: Problem, answer: Answer): boolean {
     // 符・飜数・点数のすべてが一致する場合のみ正解（要件 1.4）
     // 早期リターンで高速化
-    if (answer.fu !== problem.correctFu) {
-      this.updateStatistics(false);
-      return false;
-    }
+    const isCorrect = 
+      answer.fu === problem.correctFu &&
+      answer.han === problem.correctHan &&
+      answer.score === problem.correctScore;
     
-    if (answer.han !== problem.correctHan) {
-      this.updateStatistics(false);
-      return false;
-    }
+    // 回答履歴を記録
+    this.recordAnswer(problem, isCorrect);
     
-    if (answer.score !== problem.correctScore) {
-      this.updateStatistics(false);
-      return false;
-    }
-
-    // すべて一致した場合のみここに到達
-    this.updateStatistics(true);
-    return true;
+    // 統計を更新
+    this.updateStatistics(isCorrect);
+    
+    return isCorrect;
   }
 
   /**
@@ -77,6 +75,20 @@ export class QuizManager {
    */
   getStatistics(): Statistics {
     return { ...this.statistics };
+  }
+
+  /**
+   * 拡張統計情報を取得する
+   * @returns 計算された拡張統計情報
+   * 
+   * 要件:
+   * - 3.1: 難易度別の正解率を表示
+   * - 3.2: 最近の10問の正解率を表示
+   * - 3.3: 連続正解数を表示
+   * - 3.4: 学習時間を表示
+   */
+  getExtendedStatistics(): ExtendedStatistics {
+    return calculateExtendedStatistics(this.answerHistory);
   }
 
   /**
@@ -90,7 +102,23 @@ export class QuizManager {
       incorrectCount: 0,
       correctRate: 0,
     };
+    this.answerHistory = [];
+    this.sessionStartTime = Date.now();
     this.lastProblemId = null;
+  }
+
+  /**
+   * 回答履歴を記録する
+   * @param problem 問題
+   * @param isCorrect 正解かどうか
+   */
+  private recordAnswer(problem: Problem, isCorrect: boolean): void {
+    this.answerHistory.push({
+      isCorrect,
+      difficulty: problem.difficulty,
+      timestamp: Date.now(),
+      problemId: problem.id,
+    });
   }
 
   /**

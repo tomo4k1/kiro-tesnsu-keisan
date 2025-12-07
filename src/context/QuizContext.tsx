@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import type { SessionState, Answer, Statistics, GameSettings, Difficulty } from '../types';
+import type { SessionState, Answer, Statistics, GameSettings, Difficulty, ExtendedStatistics } from '../types';
 import { QuizManager } from '../services/QuizManager';
 import { SettingsManager } from '../services/SettingsManager';
 import { measurePerformance, validatePerformanceRequirement, PERFORMANCE_THRESHOLDS } from '../utils/performance';
@@ -41,6 +41,26 @@ const defaultStatistics: Statistics = {
 };
 
 /**
+ * デフォルトの拡張統計情報
+ */
+const defaultExtendedStatistics: ExtendedStatistics = {
+  totalAnswered: 0,
+  correctCount: 0,
+  incorrectCount: 0,
+  correctRate: 0,
+  byDifficulty: {
+    easy: { total: 0, correct: 0, rate: 0 },
+    medium: { total: 0, correct: 0, rate: 0 },
+    hard: { total: 0, correct: 0, rate: 0 },
+  },
+  recentTen: [],
+  currentStreak: 0,
+  bestStreak: 0,
+  totalStudyTime: 0,
+  sessionStartTime: Date.now(),
+};
+
+/**
  * 初期セッション状態を作成
  */
 const createInitialState = (): SessionState => {
@@ -51,6 +71,7 @@ const createInitialState = (): SessionState => {
     userAnswer: {},
     isAnswered: false,
     statistics: { ...defaultStatistics },
+    extendedStatistics: { ...defaultExtendedStatistics },
     settings,
   };
 };
@@ -192,11 +213,13 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
       
       // 統計情報を更新（1回の呼び出しで取得）
       const updatedStatistics = quizManagerRef.current.getStatistics();
+      const updatedExtendedStatistics = quizManagerRef.current.getExtendedStatistics();
       
       setState(prev => ({
         ...prev,
         isAnswered: true,
         statistics: updatedStatistics,
+        extendedStatistics: updatedExtendedStatistics,
       }));
 
       return isCorrect;
@@ -224,6 +247,7 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
   const resetSession = useCallback(() => {
     quizManagerRef.current.resetSession();
     const updatedStatistics = quizManagerRef.current.getStatistics();
+    const updatedExtendedStatistics = quizManagerRef.current.getExtendedStatistics();
     
     setState(prev => ({
       ...prev,
@@ -231,6 +255,7 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
       userAnswer: {},
       isAnswered: false,
       statistics: updatedStatistics,
+      extendedStatistics: updatedExtendedStatistics,
     }));
   }, []);
 

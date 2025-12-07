@@ -1,5 +1,6 @@
-import React from 'react';
-import type { Answer } from '../types';
+import React, { useState } from 'react';
+import type { Answer, Hand } from '../types';
+import { ExplanationPanel } from './ExplanationPanel';
 
 /**
  * ResultModalコンポーネントのProps
@@ -8,34 +9,48 @@ interface ResultModalProps {
   isCorrect: boolean;
   userAnswer: Answer;
   correctAnswer: Answer;
+  hand: Hand;
   onNext: () => void;
 }
 
 /**
  * 回答結果を表示するモーダルコンポーネント
- * 要件 1.4, 1.5, 4.1 を満たす
+ * 要件 1.4, 1.5, 2.1, 2.4, 4.1 を満たす
  */
 export const ResultModal: React.FC<ResultModalProps> = ({
   isCorrect,
   userAnswer,
   correctAnswer,
+  hand,
   onNext,
 }) => {
+  // 解説パネルの表示状態を管理
+  // 不正解時は自動表示、正解時はボタンで表示（要件 2.1, 2.4）
+  const [showExplanation, setShowExplanation] = useState(!isCorrect);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-slideUp">
+    <>
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fadeIn"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="result-title"
+      >
+        <div className={`modal-container bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-slideUp ${
+          isCorrect ? 'animate-correct-glow' : 'animate-incorrect-pulse'
+        }`}>
         {/* ヘッダー */}
         <div className="text-center mb-6">
           {isCorrect ? (
             <>
-              <div className="text-6xl mb-3">🎉</div>
-              <h2 className="text-3xl font-bold text-green-600">正解！</h2>
+              <div className="text-6xl mb-3 animate-correct-shake" aria-hidden="true">🎉</div>
+              <h2 id="result-title" className="text-3xl font-bold text-green-600 animate-count-up">正解！</h2>
               <p className="text-gray-600 mt-2">素晴らしいです！</p>
             </>
           ) : (
             <>
-              <div className="text-6xl mb-3">😔</div>
-              <h2 className="text-3xl font-bold text-red-600">不正解</h2>
+              <div className="text-6xl mb-3 animate-incorrect-shake" aria-hidden="true">😔</div>
+              <h2 id="result-title" className="text-3xl font-bold text-red-600 animate-count-up">不正解</h2>
               <p className="text-gray-600 mt-2">次は頑張りましょう！</p>
             </>
           )}
@@ -141,14 +156,37 @@ export const ResultModal: React.FC<ResultModalProps> = ({
           )}
         </div>
 
-        {/* 次の問題ボタン */}
-        <button
-          onClick={onNext}
-          className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg active:scale-95"
-        >
-          次の問題へ
-        </button>
+        {/* アクションボタン */}
+        <div className="space-y-3">
+          {/* 解説を見るボタン（要件 2.1, 2.4） */}
+          <button
+            onClick={() => setShowExplanation(true)}
+            className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+            aria-label="解説を見る"
+          >
+            <span aria-hidden="true">📖</span>
+            <span>解説を見る</span>
+          </button>
+          
+          {/* 次の問題ボタン */}
+          <button
+            onClick={onNext}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="次の問題へ進む"
+          >
+            次の問題へ
+          </button>
+        </div>
       </div>
     </div>
+
+      {/* 解説パネル（要件 2.1, 2.4） */}
+      <ExplanationPanel
+        hand={hand}
+        correctAnswer={correctAnswer}
+        isVisible={showExplanation}
+        onClose={() => setShowExplanation(false)}
+      />
+    </>
   );
 };
